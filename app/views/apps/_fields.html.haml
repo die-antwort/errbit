@@ -31,6 +31,11 @@
   .checkbox
     = f.check_box :notify_on_errs, 'data-show-when-checked' => '.email_at_notices_nested'
     = f.label :notify_on_errs, t('.notify_on_errors')
+  %div
+    = f.label :additional_emails, "Additional email addresses to notify"
+    %em comma-separated
+    = f.text_field :additional_emails
+
   - if Errbit::Config.per_app_email_at_notices
     %div.email_at_notices_nested{:style => app_decorate.notify_err_display}
       .field-helpertext Send a notification every

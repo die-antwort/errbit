@@ -10,6 +10,7 @@ class App
   field :asset_host
   field :repository_branch
   field :current_app_version
+  field :additional_emails, type: String
   field :notify_all_users, type: Boolean, default: false
   field :notify_on_errs, type: Boolean, default: true
   field :email_at_notices, type: Array, default: Errbit::Config.email_at_notices
@@ -144,11 +145,10 @@ class App
   end
 
   def notification_recipients
-    if notify_all_users
-      (User.all.map(&:email).reject(&:blank?) + watchers.map(&:address)).uniq
-    else
-      watchers.map(&:address)
-    end
+    recipients = additional_emails.split(/, */)
+    recipients += watchers.map(&:address)
+    recipients += User.all.map(&:email) if notify_all_users
+    recipients.reject(&:blank?).uniq
   end
 
   # Copy app attributes from another app.
