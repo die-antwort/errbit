@@ -145,7 +145,7 @@ class App
   end
 
   def notification_recipients
-    recipients = additional_emails.split(/, */)
+    recipients = (additional_emails || "").split(/, */)
     recipients += watchers.map(&:address)
     recipients += User.all.map(&:email) if notify_all_users
     recipients.reject(&:blank?).uniq
